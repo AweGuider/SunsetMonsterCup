@@ -3847,6 +3847,7 @@ GameObject:
   - component: {fileID: 4177463873011739338}
   - component: {fileID: 2369344378727384887}
   - component: {fileID: 1464519289113595449}
+  - component: {fileID: 736550770100000004}
   m_Layer: 2
   m_Name: LoomaKart
   m_TagString: Player
@@ -3854,6 +3855,31 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &736550770100000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8888941986988621812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 392b0f74ccab436aaed9fead1dc8c647, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _pitchLimits: {x: -10, y: 65}
+  _gamepadOrbitSpeed: 120
+  _mouseOrbitSensitivity: 0.12
+  _cameraDamping: 12
+  _zoomLimits: {x: 0.75, y: 1.25}
+  _bumperZoomSpeed: 8
+  _mouseWheelZoomStep: 1
+  _collisionLayers:
+    serializedVersion: 2
+    m_Bits: 4294965275
+  _cameraCollisionRadius: 0.35
+  _minimumCollisionDistance: 2
+  _returnDamping: 10
 --- !u!4 &8888941986988621811
 Transform:
   m_ObjectHideFlags: 0
