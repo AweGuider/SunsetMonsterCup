@@ -20,6 +20,7 @@ public class CharacterSelectionSceneManager : MonoBehaviour
 
     [SerializeField]
     private List<GameObject> _playerPrefabs;
+    private bool _isLoading;
     public static CharacterSelectionSceneManager Instance { get; private set; }
     public event Action<int, GameObject> PlayerJoined = delegate { };
     public event Action<int, GameObject> PlayerLeft = delegate { };
@@ -32,6 +33,14 @@ public class CharacterSelectionSceneManager : MonoBehaviour
     {
         controlsImage.SetActive(false);
         //DontDestroyOnLoad(PlayerInputManager.instance.gameObject);
+    }
+
+    private void Update()
+    {
+        if (!_isLoading && Keyboard.current != null && Keyboard.current.f10Key.wasPressedThisFrame)
+        {
+            StartGameWithKeyboardBypass();
+        }
     }
 
     private void OnPlayerJoined(UnityEngine.InputSystem.PlayerInput playerInput)
@@ -67,15 +76,46 @@ public class CharacterSelectionSceneManager : MonoBehaviour
 
     public void StartGameOnAllPlayersReady(bool allPlayersReady, int currentAmountOfPlayers)
     {
-        if (allPlayersReady && (pData.Testing || PlayerInputManager.instance.maxPlayerCount == currentAmountOfPlayers))
+        if (!_isLoading && allPlayersReady && (pData.Testing || PlayerInputManager.instance.maxPlayerCount == currentAmountOfPlayers))
         {
-            pData.PlayersPlaying = currentAmountOfPlayers;
-            // TODO: Depending on amount of initially selected players and so probably the amount of playing
-            // load according scene
-            // Will probably have 2 game scenes for 2P and 4P modes.
-            StartCoroutine(LoadScene(pData.GetNumberOfPlayers()));
-            //SceneManager.LoadScene("Game Scene");
+            StartGame(currentAmountOfPlayers);
         }
+    }
+
+    private void StartGameWithKeyboardBypass()
+    {
+        int currentAmountOfPlayers = PlayerInputManager.instance.playerCount;
+        int selectedAmountOfPlayers = pData.GetNumberOfPlayers();
+        bool validBypassCount = selectedAmountOfPlayers == 2 && currentAmountOfPlayers == 1
+            || selectedAmountOfPlayers == 4 && currentAmountOfPlayers == 3;
+
+        if (!validBypassCount)
+        {
+            return;
+        }
+
+        PlayerUIController[] playerControllers = _playerPanel.GetComponentsInChildren<PlayerUIController>(true);
+        if (playerControllers.Length != currentAmountOfPlayers)
+        {
+            return;
+        }
+
+        foreach (PlayerUIController playerController in playerControllers)
+        {
+            if (playerController.State != PlayerUIController.PlayerState.Ready)
+            {
+                return;
+            }
+        }
+
+        StartGame(currentAmountOfPlayers);
+    }
+
+    private void StartGame(int currentAmountOfPlayers)
+    {
+        _isLoading = true;
+        pData.PlayersPlaying = currentAmountOfPlayers;
+        StartCoroutine(LoadScene(pData.GetNumberOfPlayers()));
     }
 
     private IEnumerator LoadScene(int amount)
