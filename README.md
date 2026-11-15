@@ -1,4 +1,4 @@
-# Seaside Monster Cup
+# Sunset Monster Cup
 
 A local multiplayer kart racer starring monsters designed by children, made for the client Concordia. Saxion *Project Show-Off*, May–Jul 2023, 7-person team. I was the team's only programmer and wrote about 99% of the game scripts, about 5,800 lines.
 
